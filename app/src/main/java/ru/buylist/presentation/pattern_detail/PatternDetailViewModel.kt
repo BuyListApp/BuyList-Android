@@ -9,6 +9,7 @@ import ru.buylist.data.entity.Item
 import ru.buylist.data.repositories.pattern.PatternsDataSource
 import ru.buylist.data.wrappers.CircleWrapper
 import ru.buylist.data.wrappers.ItemWrapper
+import ru.buylist.presentation.word_tips_adapter.WordTipsAdapter
 import ru.buylist.utils.CategoryInfo
 import ru.buylist.utils.Event
 import ru.buylist.utils.JsonUtils
@@ -233,7 +234,7 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
         val newTags = mutableListOf<GlobalItem>()
         var count = 0
         for (tag in wordTips) {
-            if (count == 10) break
+            if (count == WordTipsAdapter.MAX_WORD_TIPS) break
             if (tag.name.startsWith(query, true)) {
                 newTags.add(tag)
                 count++
