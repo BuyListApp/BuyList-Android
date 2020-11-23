@@ -43,6 +43,11 @@ class WordTipsAdapter(private val listener: WordTipsListener)
             binding.callback = listener
         }
     }
+
+
+    companion object {
+        const val MAX_WORD_TIPS = 5
+    }
 }
 
 

@@ -10,16 +10,25 @@
 
         <variable
             name="callback"
-            type="ru.buylist.presentation.tag_adapter.WordTipsListener" />
+            type="ru.buylist.presentation.word_tips_adapter.WordTipsListener" />
     </data>
 
-    <TextView
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/list_item_padding"
+        app:cardCornerRadius="@dimen/corner_radius"
+        android:orientation="vertical"
         android:layout_margin="@dimen/list_item_padding"
-        android:text="@{item.name}"
-        app:tagColor="@{item.color}"
-        android:textColor="@color/colorWhite"
-        android:onClick="@{()-> callback.onWordTipClick(item)}" />
+        app:wordTipColor="@{item.color}">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/list_item_padding"
+            android:gravity="center"
+            android:text="@{item.name}"
+            android:textColor="@color/colorWhite"
+            android:onClick="@{()-> callback.onWordTipClick(item)}" />
+
+    </androidx.cardview.widget.CardView>
 </layout>
