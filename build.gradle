@@ -5,13 +5,16 @@ buildscript {
     ext {
         // Sdk
         minSdkVersion = 21
-        targetSdkVersion = 29
-        compileSdkVersion = 29
+        targetSdkVersion = 30
+        compileSdkVersion = 30
 
         // App dependencies
         appIntroVersion = '6.0.0'
         appCompatVersion = '1.2.0'
+        firebaseBomVersion = '26.1.0'
+        firebaseCrashlyticsVersion = '2.4.1'
         flexboxVersion = "2.0.1"
+        googleServicesVersion = '4.3.4'
         gradleVersion = '4.0.2'
         gsonVersion = '2.8.6'
         legacySupportVersion = '1.0.0'
@@ -34,6 +37,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:$gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
+        classpath "com.google.gms:google-services:$googleServicesVersion"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$firebaseCrashlyticsVersion"
         
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
