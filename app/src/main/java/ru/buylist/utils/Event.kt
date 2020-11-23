@@ -1,3 +1,8 @@
+/*
+* Code from:
+* https://github.com/android/architecture-samples/blob/todo-mvvm-live-kotlin/todoapp/app/src/main/java/com/example/android/architecture/blueprints/todoapp/Event.kt
+*/
+
 package ru.buylist.utils
 
 import androidx.lifecycle.Observer
