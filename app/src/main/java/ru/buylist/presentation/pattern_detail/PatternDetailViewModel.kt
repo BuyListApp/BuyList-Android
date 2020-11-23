@@ -119,7 +119,7 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
     fun saveNewItem() {
         val name = productName.value
         if (name == null) {
-            showSnackbarMessage(R.string.snackbar_empty_product_name)
+//            showSnackbarMessage(R.string.snackbar_empty_product_name)
             return
         }
 
@@ -148,7 +148,7 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
 
     fun saveEditedData(wrapper: ItemWrapper, newName: String, newQuantity: String, newUnit: String) {
         if (newName.isEmpty()) {
-            showSnackbarMessage(R.string.snackbar_empty_product_name)
+//            showSnackbarMessage(R.string.snackbar_empty_product_name)
             return
         }
 

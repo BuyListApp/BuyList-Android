@@ -63,7 +63,7 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
     fun saveNewProduct() {
         val name = productName.value
         if (name == null) {
-            showSnackbarMessage(R.string.snackbar_empty_product_name)
+//            showSnackbarMessage(R.string.snackbar_empty_product_name)
             return
         }
 

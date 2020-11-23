@@ -66,7 +66,7 @@ class PatternsViewModel(private val repository: PatternsDataSource) : ViewModel(
     fun save() {
         val title = patternTitle.value
         if (title == null) {
-            showSnackbarMessage(R.string.snackbar_empty_pattern_title)
+//            showSnackbarMessage(R.string.snackbar_empty_pattern_title)
             return
         }
 

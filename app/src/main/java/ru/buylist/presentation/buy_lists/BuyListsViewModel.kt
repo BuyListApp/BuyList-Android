@@ -64,7 +64,7 @@ class BuyListsViewModel(private val repository: BuyListsDataSource) : ViewModel(
     fun save() {
         val title = buyListTitle.value
         if (title == null) {
-            showSnackbarMessage(R.string.snackbar_empty_buy_list_title)
+//            showSnackbarMessage(R.string.snackbar_empty_buy_list_title)
             return
         }
 
