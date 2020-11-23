@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -52,6 +54,8 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
     implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "androidx.work:work-runtime-ktx:$rootProject.workVersion"
+    implementation "com.google.android:flexbox:$rootProject.flexboxVersion"
 
     // Lifecycle dependencies
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
@@ -73,6 +77,8 @@ dependencies {
     // AppIntro
     implementation "com.github.AppIntro:AppIntro:$rootProject.appIntroVersion"
 
-    implementation "androidx.work:work-runtime-ktx:$rootProject.workVersion"
-    implementation "com.google.android:flexbox:$rootProject.flexboxVersion"
+    // Firebase
+    implementation platform("com.google.firebase:firebase-bom:$rootProject.firebaseBomVersion")
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 }
