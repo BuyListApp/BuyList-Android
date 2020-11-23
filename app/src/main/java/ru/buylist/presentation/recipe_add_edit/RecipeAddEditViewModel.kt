@@ -132,7 +132,7 @@ class RecipeAddEditViewModel(private val repository: RecipesDataSource) : ViewMo
 
         val title = recipeTitle.value
         if (title == null) {
-            showSnackbarMessage(R.string.snackbar_empty_recipe_title)
+//            showSnackbarMessage(R.string.snackbar_empty_recipe_title)
             return
         }
 
