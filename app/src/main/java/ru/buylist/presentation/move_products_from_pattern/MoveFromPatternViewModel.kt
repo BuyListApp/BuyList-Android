@@ -12,7 +12,7 @@ import ru.buylist.data.repositories.pattern.PatternsDataSource
 import ru.buylist.utils.Event
 import ru.buylist.utils.JsonUtils
 
-class MoveProductsFromPatternViewModel(
+class MoveFromPatternViewModel(
         private val buyListRepository: BuyListsDataSource,
         private val patternsRepository: PatternsDataSource
 ) : ViewModel() {

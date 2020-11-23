@@ -11,7 +11,7 @@ import ru.buylist.data.repositories.pattern.PatternsDataSource
 import ru.buylist.data.repositories.recipe.RecipesDataSource
 import ru.buylist.presentation.buy_list_detail.BuyListDetailViewModel
 import ru.buylist.presentation.buy_lists.BuyListsViewModel
-import ru.buylist.presentation.move_products_from_pattern.MoveProductsFromPatternViewModel
+import ru.buylist.presentation.move_products_from_pattern.MoveFromPatternViewModel
 import ru.buylist.presentation.move_products_from_recipe.MoveFromRecipeViewModel
 import ru.buylist.presentation.pattern_detail.PatternDetailViewModel
 import ru.buylist.presentation.patterns.PatternsViewModel
@@ -61,8 +61,8 @@ class ViewModelFactory constructor(
                 RecipeDetailViewModel(recipesRepository)
 
             // move from pattern/recipe
-            isAssignableFrom(MoveProductsFromPatternViewModel::class.java) ->
-                MoveProductsFromPatternViewModel(buyListsRepository, patternsRepository)
+            isAssignableFrom(MoveFromPatternViewModel::class.java) ->
+                MoveFromPatternViewModel(buyListsRepository, patternsRepository)
             isAssignableFrom(MoveFromRecipeViewModel::class.java) ->
                 MoveFromRecipeViewModel(buyListsRepository, recipesRepository)
 

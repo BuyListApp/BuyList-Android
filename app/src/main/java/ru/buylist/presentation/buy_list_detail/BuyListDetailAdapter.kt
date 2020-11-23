@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.buylist.R
 import ru.buylist.data.wrappers.ItemWrapper
-import ru.buylist.databinding.ItemBuyListDetailBinding
+import ru.buylist.databinding.ItemBuyListProductBinding
 import ru.buylist.presentation.GenericViewHolder
 import ru.buylist.utils.hideKeyboard
 
@@ -25,9 +25,9 @@ class BuyListDetailAdapter(
 ) : ListAdapter<ItemWrapper, GenericViewHolder>(BuyListDetailDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder {
-        val binding: ItemBuyListDetailBinding = DataBindingUtil.inflate(
+        val binding: ItemBuyListProductBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_buy_list_detail,
+                R.layout.item_buy_list_product,
                 parent, false)
 
         return when (viewType) {
@@ -90,7 +90,8 @@ class BuyListDetailAdapter(
     /**
      * ViewHolder for unpurchased products
      */
-    private inner class ItemsHolder(private val binding: ItemBuyListDetailBinding) : GenericViewHolder(binding.root) {
+    private inner class ItemsHolder(private val binding: ItemBuyListProductBinding)
+        : GenericViewHolder(binding.root) {
 
         override fun bind(position: Int) {
             val item = getItem(position)
@@ -111,7 +112,8 @@ class BuyListDetailAdapter(
     /**
      * ViewHolder for purchased products
      */
-    private inner class PurchasedItemsHolder(private val binding: ItemBuyListDetailBinding) : GenericViewHolder(binding.root) {
+    private inner class PurchasedItemsHolder(private val binding: ItemBuyListProductBinding)
+        : GenericViewHolder(binding.root) {
 
         override fun bind(position: Int) {
             val item = getItem(position)

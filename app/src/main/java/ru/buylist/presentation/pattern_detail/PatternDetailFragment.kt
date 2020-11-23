@@ -22,8 +22,8 @@ import ru.buylist.databinding.FragmentPatternDetailBinding
 import ru.buylist.presentation.BaseFragment
 import ru.buylist.presentation.circle_adapter.CircleItemClickListener
 import ru.buylist.presentation.circle_adapter.CirclesAdapter
-import ru.buylist.presentation.tag_adapter.WordTipsAdapter
-import ru.buylist.presentation.tag_adapter.WordTipsListener
+import ru.buylist.presentation.word_tips_adapter.WordTipsAdapter
+import ru.buylist.presentation.word_tips_adapter.WordTipsListener
 import ru.buylist.utils.*
 
 class PatternDetailFragment : BaseFragment<FragmentPatternDetailBinding>() {

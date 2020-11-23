@@ -15,7 +15,7 @@ import ru.buylist.presentation.GenericViewHolder
  * Adapter for the patterns on the move from pattern screen.
  */
 class MoveFromPatternAdapter(
-        private val viewModel: MoveProductsFromPatternViewModel
+        private val viewModel: MoveFromPatternViewModel
 ) : ListAdapter<Pattern, GenericViewHolder>(MoveFromPatternsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder {
