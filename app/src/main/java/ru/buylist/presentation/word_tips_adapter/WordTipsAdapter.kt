@@ -1,4 +1,4 @@
-package ru.buylist.presentation.tag_adapter
+package ru.buylist.presentation.word_tips_adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -100,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/move_products_from_pattern_fragment"
-        android:name="ru.buylist.presentation.move_products_from_pattern.MoveProductsFromPatternFragment"
+        android:name="ru.buylist.presentation.move_products_from_pattern.MoveFromPatternFragment"
         android:label="Выберите шаблон">
         <argument
             android:name="buy_list_id"

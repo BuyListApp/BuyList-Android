@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import ru.buylist.R
 import ru.buylist.data.wrappers.ItemWrapper
-import ru.buylist.databinding.ItemPatternDetailBinding
+import ru.buylist.databinding.ItemPatternProductBinding
 import ru.buylist.presentation.GenericViewHolder
 import ru.buylist.utils.hideKeyboard
 
@@ -25,9 +25,9 @@ class PatternDetailAdapter(
 ) : ListAdapter<ItemWrapper, GenericViewHolder>(PatternDetailDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder {
-        val binding: ItemPatternDetailBinding = DataBindingUtil.inflate(
+        val binding: ItemPatternProductBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.item_pattern_detail,
+                R.layout.item_pattern_product,
                 parent, false)
         return ItemViewHolder(binding)
     }
@@ -40,7 +40,7 @@ class PatternDetailAdapter(
     /**
      * ViewHolder
      */
-    private inner class ItemViewHolder(private val binding: ItemPatternDetailBinding)
+    private inner class ItemViewHolder(private val binding: ItemPatternProductBinding)
         : GenericViewHolder(binding.root) {
 
         override fun bind(position: Int) {

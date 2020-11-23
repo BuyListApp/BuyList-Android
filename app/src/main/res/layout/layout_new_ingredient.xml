@@ -31,7 +31,7 @@
             android:layout_marginEnd="@dimen/list_item_padding"
             android:scrollbars="none"
             android:background="@android:color/transparent"
-            app:tags="@{viewModel.wordTipsToShow}" />
+            app:wordTips="@{viewModel.wordTipsToShow}" />
 
         <!--Палитра цветов-->
         <RelativeLayout
