@@ -57,10 +57,17 @@ class RecipeAddEditFragment : BaseFragment<FragmentRecipeAddEditBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setupAdapter()
         setupSnackbar()
+        setupNavigation()
+    }
 
+    private fun setupNavigation() {
         viewModel.detailsEvent.observe(viewLifecycleOwner, EventObserver { recipe ->
             val action = RecipeAddEditFragmentDirections.actionRecipeAddEditFragmentToRecipeDetailFragment(recipe.id, recipe.title)
             findNavController().navigate(action)
+        })
+
+        viewModel.saveIngredientEvent.observe(viewLifecycleOwner, EventObserver {
+            field_name.requestFocus()
         })
     }
 

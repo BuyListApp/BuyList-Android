@@ -90,6 +90,9 @@ class RecipeAddEditViewModel(private val repository: RecipesDataSource) : ViewMo
     private val _detailsEvent = MutableLiveData<Event<Recipe>>()
     val detailsEvent: LiveData<Event<Recipe>> = _detailsEvent
 
+    private val _saveIngredientEvent = MediatorLiveData<Event<Unit>>()
+    val saveIngredientEvent: LiveData<Event<Unit>> = _saveIngredientEvent
+
 
     fun start(recipeId: Long, newColors: List<String>) {
         _recipeId = recipeId
@@ -189,6 +192,7 @@ class RecipeAddEditViewModel(private val repository: RecipesDataSource) : ViewMo
         itemName.value = null
         this.quantity.value = null
         this.unit.value = null
+        _saveIngredientEvent.value = Event(Unit)
     }
 
     fun addNewStep() {
