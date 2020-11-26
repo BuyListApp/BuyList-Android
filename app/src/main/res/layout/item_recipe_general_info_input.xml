@@ -62,7 +62,7 @@
             android:background="@drawable/field_border"
             android:hint="@string/hint_cooking_time">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/field_cooking_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,6 @@
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:imeOptions="actionNext"
-                android:hint="@string/hint_cooking_time"
                 android:text="@={view_model.recipeCookingTime}" />
         </com.google.android.material.textfield.TextInputLayout>
 
