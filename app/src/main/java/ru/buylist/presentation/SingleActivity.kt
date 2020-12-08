@@ -1,6 +1,7 @@
 package ru.buylist.presentation
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -43,10 +44,14 @@ class SingleActivity : AppCompatActivity() {
         }
 
         nav_drawer.setNavigationItemSelectedListener { item ->
-            if (item.itemId == R.id.about_fragment) {
-                showIntro()
-                true
+            when(item.itemId) {
+                R.id.about_fragment -> showIntro()
+                R.id.nav_feedback -> sendEmail()
             }
+//            if (item.itemId == R.id.about_fragment) {
+//                showIntro()
+//                true
+//            }
 
             NavigationUI.onNavDestinationSelected(item, navController)
             drawer_layout.closeDrawers()
@@ -74,12 +79,27 @@ class SingleActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun sendEmail() {
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(EMAIL))
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
+        }
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
+    }
+
     private fun showBottomMenu() {
         nav_bottom.visibility = View.VISIBLE
     }
 
     private fun hideBottomMenu() {
         nav_bottom.visibility = View.GONE
+    }
+
+    companion object {
+        private const val EMAIL = "buylist.feedback@gmail.com"
     }
 
 }
