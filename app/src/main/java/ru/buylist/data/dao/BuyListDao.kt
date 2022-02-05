@@ -7,7 +7,7 @@ import ru.buylist.data.entity.BuyList
 @Dao
 interface BuyListDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertBuyList(buyList: BuyList)
 
     @Update

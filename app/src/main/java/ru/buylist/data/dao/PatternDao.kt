@@ -7,7 +7,7 @@ import ru.buylist.data.entity.Pattern
 @Dao
 interface PatternDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPattern(pattern: Pattern)
 
     @Update

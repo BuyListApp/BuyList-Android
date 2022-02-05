@@ -9,6 +9,7 @@ import ru.buylist.data.entity.Item
 import ru.buylist.data.entity.Recipe
 import ru.buylist.data.repositories.buyList.BuyListsDataSource
 import ru.buylist.data.repositories.recipe.RecipesDataSource
+import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.utils.Event
 import ru.buylist.utils.JsonUtils
 
@@ -31,8 +32,8 @@ class MoveFromRecipeViewModel(
         it.isEmpty() || it == null
     }
 
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarText: LiveData<Event<Int>> = _snackbarText
+    private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
+    val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
 
 
 
@@ -61,7 +62,7 @@ class MoveFromRecipeViewModel(
     }
 
     private fun showSnackbarMessage(message: Int) {
-        _snackbarText.value = Event(message)
+        _snackbarText.value = Event(SnackbarData(message))
     }
 
     private fun onProductsLoaded(result: String) {

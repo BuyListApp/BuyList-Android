@@ -27,7 +27,8 @@ class SingleActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         appBarConfig = AppBarConfiguration(
                 setOf(R.id.buy_lists_fragment, R.id.patterns_fragment, R.id.recipes_fragment),
-                drawer_layout)
+                drawer_layout
+        )
         setupActionBarWithNavController(navController, appBarConfig)
 
         // setup drawer and bottom navigation

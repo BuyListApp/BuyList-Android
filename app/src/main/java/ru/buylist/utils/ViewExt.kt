@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import ru.buylist.R
+import ru.buylist.presentation.data.SnackbarData
 
 fun View.showKeyboard() {
 
@@ -33,24 +34,32 @@ fun View.hideKeyboard() {
 
 fun View.showSnackbar(message: String, btnText: String, listener: View.OnClickListener) {
     Snackbar
-            .make(this, message, Snackbar.LENGTH_INDEFINITE)
-            .setAction(btnText, listener)
-            .setActionTextColor(resources.getColor(R.color.colorPrimary))
-            .show()
+        .make(this, message, Snackbar.LENGTH_INDEFINITE)
+        .setAction(btnText, listener)
+        .setActionTextColor(resources.getColor(R.color.colorPrimary))
+        .show()
 }
 
 
 fun View.setupSnackbar(
-        lifecycleOwner: LifecycleOwner,
-        snackbarEvent: LiveData<Event<Int>>
+    lifecycleOwner: LifecycleOwner,
+    snackbarEvent: LiveData<Event<SnackbarData>>
 ) {
 
-    snackbarEvent.observe(lifecycleOwner, { event ->
-        event.getContentIfNotHandled()?.let {
-            showSnackbar(
-                    context.getString(it),
-                    context.getString(R.string.snackbar_action_ok)
-            ) { }
+    snackbarEvent
+        .observe(lifecycleOwner) { event ->
+            event
+                .getContentIfNotHandled()
+                ?.let { data ->
+                    showSnackbar(
+                        message = data.args
+                            ?.let {
+                                context.getString(data.message, data.args)
+                            }
+                            ?: context.getString(data.message),
+                        btnText = context.getString(R.string.snackbar_action_ok),
+                        listener = { }
+                    )
+                }
         }
-    })
 }

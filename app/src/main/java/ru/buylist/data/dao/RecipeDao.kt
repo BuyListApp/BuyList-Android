@@ -7,7 +7,7 @@ import ru.buylist.data.entity.Recipe
 @Dao
 interface RecipeDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertRecipe(recipe: Recipe)
 
     @Update

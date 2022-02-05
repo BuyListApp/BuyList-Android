@@ -7,7 +7,13 @@
             android:id="@+id/product_dictionary_fragment"
             android:title="@string/nav_product_dictionary"
             android:icon="@drawable/ic_book" />
+
     </group>
+
+    <item
+        android:id="@+id/import_export_fragment"
+        android:title="@string/nav_import_export_data"
+        android:icon="@drawable/ic_import_export" />
 
     <item android:title="@string/nav_group_info">
         <menu>

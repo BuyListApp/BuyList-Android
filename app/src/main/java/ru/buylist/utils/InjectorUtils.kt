@@ -11,35 +11,47 @@ import ru.buylist.data.repositories.pattern.PatternsRepository
 import ru.buylist.data.repositories.recipe.RecipesDataSource
 import ru.buylist.data.repositories.recipe.RecipesRepository
 import ru.buylist.presentation.ViewModelFactory
+import ru.buylist.presentation.import_and_export_data.IImportExportDataProvider
+import ru.buylist.presentation.import_and_export_data.ImportExportDataProvider
 
 object InjectorUtils {
 
     fun provideViewModel(owner: SavedStateRegistryOwner) = ViewModelFactory(
-            getBuyListsRepository(),
-            getPatternsRepository(),
-            getRecipesRepository(),
-            getGlobalItemsRepository(),
-            owner
+        getBuyListsRepository(),
+        getPatternsRepository(),
+        getRecipesRepository(),
+        getGlobalItemsRepository(),
+        getImportExportDataProvider(),
+        owner
     )
+
+    private fun getImportExportDataProvider(): IImportExportDataProvider {
+        return ImportExportDataProvider.getInstance(
+            buyListsRepository = getBuyListsRepository(),
+            patternsRepository = getPatternsRepository(),
+            recipesRepository = getRecipesRepository(),
+            globalItemRepository = getGlobalItemsRepository()
+        )
+    }
 
     private fun getBuyListsRepository(): BuyListsDataSource {
         return BuyListsRepository.getInstance(
-                BuyListApp.get().getDatabase().buyListDao(),
-                BuyListApp.get().getDatabase().globalItemDao()
+            BuyListApp.get().getDatabase().buyListDao(),
+            BuyListApp.get().getDatabase().globalItemDao()
         )
     }
 
     private fun getPatternsRepository(): PatternsDataSource {
         return PatternsRepository.getInstance(
-                BuyListApp.get().getDatabase().patternDao(),
-                BuyListApp.get().getDatabase().globalItemDao()
+            BuyListApp.get().getDatabase().patternDao(),
+            BuyListApp.get().getDatabase().globalItemDao()
         )
     }
 
     private fun getRecipesRepository(): RecipesDataSource {
         return RecipesRepository.getInstance(
-                BuyListApp.get().getDatabase().recipeDao(),
-                BuyListApp.get().getDatabase().globalItemDao()
+            BuyListApp.get().getDatabase().recipeDao(),
+            BuyListApp.get().getDatabase().globalItemDao()
         )
     }
 

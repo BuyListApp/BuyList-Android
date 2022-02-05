@@ -11,6 +11,8 @@ import ru.buylist.data.repositories.pattern.PatternsDataSource
 import ru.buylist.data.repositories.recipe.RecipesDataSource
 import ru.buylist.presentation.buy_list_detail.BuyListDetailViewModel
 import ru.buylist.presentation.buy_lists.BuyListsViewModel
+import ru.buylist.presentation.import_and_export_data.IImportExportDataProvider
+import ru.buylist.presentation.import_and_export_data.ImportAndExportDataViewModel
 import ru.buylist.presentation.move_products_from_pattern.MoveFromPatternViewModel
 import ru.buylist.presentation.move_products_from_recipe.MoveFromRecipeViewModel
 import ru.buylist.presentation.pattern_detail.PatternDetailViewModel
@@ -26,12 +28,13 @@ import ru.buylist.presentation.recipes.RecipesViewModel
  */
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(
-        private val buyListsRepository: BuyListsDataSource,
-        private val patternsRepository: PatternsDataSource,
-        private val recipesRepository: RecipesDataSource,
-        private val globalItemRepository: GlobalItemsDataSource,
-        owner: SavedStateRegistryOwner,
-        defaultArgs: Bundle? = null
+    private val buyListsRepository: BuyListsDataSource,
+    private val patternsRepository: PatternsDataSource,
+    private val recipesRepository: RecipesDataSource,
+    private val globalItemRepository: GlobalItemsDataSource,
+    private val importExportDataProvider: IImportExportDataProvider,
+    owner: SavedStateRegistryOwner,
+    defaultArgs: Bundle? = null
 ) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
 
     override fun <T : ViewModel> create(
@@ -69,6 +72,11 @@ class ViewModelFactory constructor(
             // product dictionary
             isAssignableFrom(ProductDictionaryViewModel::class.java) ->
                 ProductDictionaryViewModel(globalItemRepository)
+
+            // import and export data
+            isAssignableFrom(ImportAndExportDataViewModel::class.java) ->
+                ImportAndExportDataViewModel(importExportDataProvider)
+
             else ->
                 throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

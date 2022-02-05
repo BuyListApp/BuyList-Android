@@ -79,6 +79,7 @@
 
     <!--Drawer-->
     <string name="nav_product_dictionary">Словарь продуктов</string>
+    <string name="nav_import_export_data">Импорт и экспорт списков</string>
     <string name="nav_group_info">Информация</string>
     <string name="nav_feedback">Отправить отзыв</string>
     <string name="nav_about">О приложении</string>
@@ -98,6 +99,27 @@
     <string name="snackbar_no_products_in_recipe">В выбранном рецепте нет продуктов</string>
     <string name="snackbar_products_moved_from_pattern">Продукты из шаблона перенесены в список покупок</string>
     <string name="snackbar_products_moved_from_recipe">Продукты из рецепта перенесены в список покупок</string>
+
+    <!-- Import/Export -->
+    <string name="import_title">Импорт</string>
+    <string name="export_title">Экспорт</string>
+    <string name="export_info">
+        <![CDATA[
+            <b>1.</b> Нажмите на кнопку <b>\"Экспорт\"</b>.
+            Ваши списки, шаблоны и рецепты будут сохранены в специальный файл, который потребуется
+            отправить на вашу электронную почту или в любой из мессенджеров.
+        ]]>
+    </string>
+    <string name="import_info">
+        <![CDATA[
+            <b>2.</b> На другом устройстве скачайте приложение BuyList и файл, который был экспортирован на
+            первом шаге.<br><br>
+            <b>3.</b> Нажмите на кнопку <b>\"Импорт\"</b> и выберите этот файл.
+        ]]>
+    </string>
+    <string name="import_file_title">Выберите файл</string>
+    <string name="import_error">Ошибка: %s</string>
+    <string name="import_success">Данные успешно импортированы</string>
 
     <!--Colors-->
     <string-array name="category_color">
