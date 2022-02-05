@@ -8,6 +8,7 @@ import ru.buylist.data.Result.Success
 import ru.buylist.data.entity.Pattern
 import ru.buylist.data.repositories.pattern.PatternsDataSource
 import ru.buylist.data.wrappers.PatternWrapper
+import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.utils.Event
 
 class PatternsViewModel(private val repository: PatternsDataSource) : ViewModel() {
@@ -38,8 +39,8 @@ class PatternsViewModel(private val repository: PatternsDataSource) : ViewModel(
 
     var patternTitle = MutableLiveData<String>()
 
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarText: LiveData<Event<Int>> = _snackbarText
+    private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
+    val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
 
     private val _addPatternEvent = MutableLiveData<Event<Unit>>()
     val addPatternEvent: LiveData<Event<Unit>> = _addPatternEvent
@@ -117,7 +118,7 @@ class PatternsViewModel(private val repository: PatternsDataSource) : ViewModel(
     }
 
     private fun showSnackbarMessage(message: Int) {
-        _snackbarText.value = Event(message)
+        _snackbarText.value = Event(SnackbarData(message))
     }
 
     private fun loadPatterns(patternsResult: Result<List<Pattern>>, position: Int?)

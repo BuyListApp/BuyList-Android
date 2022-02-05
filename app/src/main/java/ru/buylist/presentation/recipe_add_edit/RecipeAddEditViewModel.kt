@@ -12,6 +12,7 @@ import ru.buylist.data.wrappers.CircleWrapper
 import ru.buylist.data.wrappers.CookingStepWrapper
 import ru.buylist.data.wrappers.ItemWrapper
 import ru.buylist.data.repositories.recipe.RecipesDataSource
+import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.presentation.word_tips_adapter.WordTipsAdapter
 import ru.buylist.utils.CategoryInfo
 import ru.buylist.utils.Event
@@ -83,8 +84,8 @@ class RecipeAddEditViewModel(private val repository: RecipesDataSource) : ViewMo
 
     val circles: LiveData<List<CircleWrapper>> = _circles
 
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarText: LiveData<Event<Int>> = _snackbarText
+    private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
+    val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
 
     // Event that opens the recipe detail screen
     private val _detailsEvent = MutableLiveData<Event<Recipe>>()
@@ -373,7 +374,7 @@ class RecipeAddEditViewModel(private val repository: RecipesDataSource) : ViewMo
     }
 
     private fun showSnackbarMessage(message: Int) {
-        _snackbarText.value = Event(message)
+        _snackbarText.value = Event(SnackbarData(message))
     }
 
     private fun onRecipeLoaded(recipe: Recipe) {

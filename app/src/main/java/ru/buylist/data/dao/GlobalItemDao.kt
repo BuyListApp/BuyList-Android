@@ -10,7 +10,7 @@ interface GlobalItemDao {
     @Insert
     suspend fun insertGlobalItems(globalItems: List<GlobalItem>)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGlobalItem(globalItem: GlobalItem)
 
     @Update

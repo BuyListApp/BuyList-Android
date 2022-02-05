@@ -8,6 +8,7 @@ import ru.buylist.data.Result.*
 import ru.buylist.data.entity.BuyList
 import ru.buylist.data.wrappers.BuyListWrapper
 import ru.buylist.data.repositories.buyList.BuyListsDataSource
+import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.utils.Event
 
 /**
@@ -15,7 +16,7 @@ import ru.buylist.utils.Event
  */
 class BuyListsViewModel(private val repository: BuyListsDataSource) : ViewModel() {
 
-    private val _forceUpdate = MutableLiveData<Boolean>(false)
+    private val _forceUpdate = MutableLiveData(false)
     private val _buyListToEdit = MutableLiveData<Int>()
 
     private val _triggers =
@@ -41,8 +42,8 @@ class BuyListsViewModel(private val repository: BuyListsDataSource) : ViewModel(
 
     val buyListTitle = MutableLiveData<String>()
 
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarText: LiveData<Event<Int>> = _snackbarText
+    private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
+    val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
 
     private val _addBuyListsEvent = MutableLiveData<Event<Unit>>()
     val addBuyList: LiveData<Event<Unit>> = _addBuyListsEvent
@@ -121,7 +122,7 @@ class BuyListsViewModel(private val repository: BuyListsDataSource) : ViewModel(
     }
 
     private fun showSnackbarMessage(message: Int) {
-        _snackbarText.value = Event(message)
+        _snackbarText.value = Event(SnackbarData(message))
     }
 
     private fun loadBuyLists(buyListResult: Result<List<BuyList>>, position: Int?)

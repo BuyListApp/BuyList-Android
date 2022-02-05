@@ -9,6 +9,7 @@ import ru.buylist.data.entity.Item
 import ru.buylist.data.repositories.pattern.PatternsDataSource
 import ru.buylist.data.wrappers.CircleWrapper
 import ru.buylist.data.wrappers.ItemWrapper
+import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.presentation.word_tips_adapter.WordTipsAdapter
 import ru.buylist.utils.CategoryInfo
 import ru.buylist.utils.Event
@@ -75,8 +76,8 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
     val circles: LiveData<List<CircleWrapper>> = _circles
 
     // Events
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarText: LiveData<Event<Int>> = _snackbarText
+    private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
+    val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
 
     private val _addProductEvent = MutableLiveData<Event<Unit>>()
     val addProductEvent: LiveData<Event<Unit>> = _addProductEvent
@@ -227,7 +228,7 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
     }
 
     private fun showSnackbarMessage(message: Int) {
-        _snackbarText.value = Event(message)
+        _snackbarText.value = Event(SnackbarData(message))
     }
 
     private fun filterTags(query: CharSequence): List<GlobalItem> {

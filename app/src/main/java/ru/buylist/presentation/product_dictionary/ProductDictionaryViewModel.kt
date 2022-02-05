@@ -8,6 +8,7 @@ import ru.buylist.data.Result.Success
 import ru.buylist.data.entity.GlobalItem
 import ru.buylist.data.repositories.items.GlobalItemsDataSource
 import ru.buylist.data.wrappers.CircleWrapper
+import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.utils.CategoryInfo
 import ru.buylist.utils.Event
 
@@ -42,8 +43,8 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
     val prevArrowIsShown = MutableLiveData<Boolean>(true)
     val nextArrowIsShown = MutableLiveData<Boolean>(true)
 
-    private val _snackbarText = MutableLiveData<Event<Int>>()
-    val snackbarText: LiveData<Event<Int>> = _snackbarText
+    private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
+    val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
 
     private val _addProductEvent = MutableLiveData<Event<Unit>>()
     val addProductEvent: LiveData<Event<Unit>> = _addProductEvent
@@ -101,7 +102,7 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
     }
 
     private fun showSnackbarMessage(message: Int) {
-        _snackbarText.value = Event(message)
+        _snackbarText.value = Event(SnackbarData(message))
     }
 
     private fun getWrappedCircles(colors: List<String>?, position: Int?): List<CircleWrapper> {
