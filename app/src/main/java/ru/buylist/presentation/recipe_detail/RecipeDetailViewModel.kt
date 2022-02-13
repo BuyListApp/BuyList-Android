@@ -9,6 +9,7 @@ import ru.buylist.data.entity.Item
 import ru.buylist.data.entity.Recipe
 import ru.buylist.data.repositories.recipe.RecipesDataSource
 import ru.buylist.presentation.data.SnackbarData
+import ru.buylist.presentation.recipe_detail.data.RecipeShareData
 import ru.buylist.utils.Event
 import ru.buylist.utils.JsonUtils
 
@@ -39,11 +40,41 @@ class RecipeDetailViewModel(private val repository: RecipesDataSource) : ViewMod
     private val _editEvent = MutableLiveData<Event<Unit>>()
     val editEvent: LiveData<Event<Unit>> = _editEvent
 
-    val fabIsShown = MutableLiveData<Boolean>(true)
+    private val _shareRecipe = MutableLiveData<Event<RecipeShareData>>()
+    val shareRecipe: LiveData<Event<RecipeShareData>> = _shareRecipe
+
+    val fabIsShown = MutableLiveData(true)
 
 
     fun start(recipeId: Long) {
         _recipeId.value = recipeId
+    }
+
+    fun share() {
+        val ingredientsTemp = _ingredients.value ?: emptyList()
+        val ingredientsShareData = ingredientsTemp
+            .filter { it.name.isNotBlank() }
+            .mapIndexed { index, item ->
+                "${index + 1}.${item.name} - ${item.quantity}${item.unit}"
+            }
+
+        val cookingStepsTemp = _cookingStep.value ?: emptyList()
+        val cookingStepsShareData = cookingStepsTemp
+            .filter { it.description.isNotBlank() }
+            .mapIndexed { index, item ->
+                "${index + 1}.${item.description}"
+            }
+
+        if (ingredientsShareData.isEmpty() && cookingStepsShareData.isEmpty()) {
+            showSnackbarMessage(R.string.snackbar_recipe_is_empty)
+            return
+        }
+        _shareRecipe.value = Event(
+            RecipeShareData(
+                ingredients = ingredientsShareData,
+                cookingSteps = cookingStepsShareData
+            )
+        )
     }
 
     fun editRecipe() {

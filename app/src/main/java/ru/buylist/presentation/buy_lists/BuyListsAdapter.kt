@@ -21,14 +21,17 @@ import ru.buylist.utils.hideKeyboard
  */
 
 class BuyListsAdapter(
-        private val viewModel: BuyListsViewModel
+    private val viewModel: BuyListsViewModel
 ) : ListAdapter<BuyListWrapper, GenericViewHolder>(BuyListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder {
-        val binding: ItemBuyListBinding = DataBindingUtil.inflate(
+        val binding: ItemBuyListBinding = DataBindingUtil
+            .inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.item_buy_list,
-                parent, false)
+                parent,
+                false
+            )
         return BuyListHolder(binding)
     }
 
@@ -41,22 +44,26 @@ class BuyListsAdapter(
      * ViewHolder
      */
     private inner class BuyListHolder(private val binding: ItemBuyListBinding) :
-            GenericViewHolder(binding.root) {
+        GenericViewHolder(binding.root) {
 
         override fun bind(position: Int) {
             val item = getItem(position)
             binding.item = item
             binding.callback = getListener(
-                    itemView.context,
-                    binding.btnMore,
-                    binding.fieldBuyListTitle
+                itemView.context,
+                binding.btnMore,
+                binding.fieldBuyListTitle
             )
             binding.executePendingBindings()
         }
 
-        private fun getListener(context: Context, btnMore: View, field: EditText):
-                BuyListItemListener {
+        private fun getListener(
+            context: Context,
+            btnMore: View,
+            field: EditText
+        ): BuyListItemListener {
             return object : BuyListItemListener {
+
                 override fun onBuyListClicked(buyList: BuyList) {
                     viewModel.showDetail(buyList)
                 }

@@ -88,6 +88,9 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
     private val _productsAddedEvent = MutableLiveData<Event<Unit>>()
     val productsAddedEvent: LiveData<Event<Unit>> = _productsAddedEvent
 
+    private val _sharePattern = MutableLiveData<Event<List<String>>>()
+    val sharePattern: LiveData<Event<List<String>>> = _sharePattern
+
 
     fun start(patternId: Long, newColors: List<String>) {
         _patternId.value = patternId
@@ -141,6 +144,20 @@ class PatternDetailViewModel(private val repository: PatternsDataSource) : ViewM
         productQuantity.value = null
         productUnit.value = null
         _saveProductEvent.value = Event(Unit)
+    }
+
+    fun share() {
+        val data = items
+            .filter { it.name.isNotBlank() }
+            .mapIndexed { index, item ->
+                "${index + 1}.${item.name} - ${item.quantity}${item.unit}"
+            }
+
+        if (data.isEmpty()) {
+            showSnackbarMessage(R.string.snackbar_pattern_products_is_empty)
+            return
+        }
+        _sharePattern.value = Event(data)
     }
 
     fun edit(wrapper: ItemWrapper) {
