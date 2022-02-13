@@ -5,6 +5,10 @@
     <string name="label_buy_list">Списки</string>
     <string name="label_pattern">Шаблоны</string>
     <string name="label_recipe">Рецепты</string>
+    <string name="label_share">Поделиться</string>
+    <string name="buylist_title_share">Список покупок</string>
+    <string name="pattern_title_share">Шаблон для списка покупок</string>
+    <string name="recipe_title_share">Рецепт</string>
     <string name="label_edit">Редактировать</string>
     <string name="label_delete">Удалить</string>
     <string name="email_subject">Отзыв по BuyList</string>
@@ -99,6 +103,15 @@
     <string name="snackbar_no_products_in_recipe">В выбранном рецепте нет продуктов</string>
     <string name="snackbar_products_moved_from_pattern">Продукты из шаблона перенесены в список покупок</string>
     <string name="snackbar_products_moved_from_recipe">Продукты из рецепта перенесены в список покупок</string>
+    <string name="snackbar_buylist_products_is_empty">
+        Чтобы поделиться списком покупок в нём должна быть хотя бы одна позиция.
+    </string>
+    <string name="snackbar_pattern_products_is_empty">
+        Чтобы поделиться шаблоном в нём должна быть хотя бы одна позиция.
+    </string>
+    <string name="snackbar_recipe_is_empty">
+        Чтобы поделиться рецептом в нём должны быть ингредиенты или шаги приготовления.
+    </string>
 
     <!-- Import/Export -->
     <string name="import_title">Импорт</string>

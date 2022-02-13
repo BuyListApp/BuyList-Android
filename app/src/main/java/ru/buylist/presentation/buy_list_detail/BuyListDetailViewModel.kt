@@ -7,16 +7,18 @@ import ru.buylist.data.Result
 import ru.buylist.data.Result.Success
 import ru.buylist.data.entity.GlobalItem
 import ru.buylist.data.entity.Item
+import ru.buylist.data.repositories.buyList.BuyListsDataSource
 import ru.buylist.data.wrappers.CircleWrapper
 import ru.buylist.data.wrappers.ItemWrapper
-import ru.buylist.data.repositories.buyList.BuyListsDataSource
 import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.presentation.word_tips_adapter.WordTipsAdapter
 import ru.buylist.utils.CategoryInfo
 import ru.buylist.utils.Event
 import ru.buylist.utils.JsonUtils
 
-class BuyListDetailViewModel(private val repository: BuyListsDataSource) : ViewModel() {
+class BuyListDetailViewModel(
+    private val repository: BuyListsDataSource
+) : ViewModel() {
 
     private val items = mutableListOf<Item>()
     private val wordTips = mutableListOf<GlobalItem>()
@@ -36,10 +38,10 @@ class BuyListDetailViewModel(private val repository: BuyListsDataSource) : ViewM
     private val _productToEdit = MutableLiveData<Int>()
 
     private val _triggers = MediatorLiveData<Pair<Long?, Int?>>()
-            .apply {
-                addSource(_buyListId) { value = Pair(it, _productToEdit.value) }
-                addSource(_productToEdit) { value = Pair(_buyListId.value, it) }
-            }
+        .apply {
+            addSource(_buyListId) { value = Pair(it, _productToEdit.value) }
+            addSource(_productToEdit) { value = Pair(_buyListId.value, it) }
+        }
 
     private val _products = _triggers.switchMap { triggers ->
         repository.observeBuyList(triggers.first).map { computeResult(it, triggers.second) }
@@ -64,8 +66,7 @@ class BuyListDetailViewModel(private val repository: BuyListsDataSource) : ViewM
     private val _colors = MutableLiveData<List<String>>()
     private val _selectedColor = MutableLiveData<Int>()
 
-    private val _circlesUpdate
-            = MediatorLiveData<Pair<List<String>?, Int?>>().apply {
+    private val _circlesUpdate = MediatorLiveData<Pair<List<String>?, Int?>>().apply {
         addSource(_colors) { value = Pair(it, _selectedColor.value) }
         addSource(_selectedColor) { value = Pair(_colors.value, it) }
     }
@@ -96,6 +97,9 @@ class BuyListDetailViewModel(private val repository: BuyListsDataSource) : ViewM
 
     private val _productsAddedEvent = MutableLiveData<Event<Unit>>()
     val productAddedEvent: LiveData<Event<Unit>> = _productsAddedEvent
+
+    private val _shareBuyList = MutableLiveData<Event<List<String>>>()
+    val shareBuyList: LiveData<Event<List<String>>> = _shareBuyList
 
 
     fun start(buyListId: Long, colors: List<String>) {
@@ -164,11 +168,30 @@ class BuyListDetailViewModel(private val repository: BuyListsDataSource) : ViewM
         _saveProductEvent.value = Event(Unit)
     }
 
+    fun share() {
+        val data = items
+            .filter { it.name.isNotBlank() }
+            .mapIndexed { index, item ->
+                "${index + 1}.${item.name} - ${item.quantity}${item.unit}"
+            }
+
+        if (data.isEmpty()) {
+            showSnackbarMessage(R.string.snackbar_buylist_products_is_empty)
+            return
+        }
+        _shareBuyList.value = Event(data)
+    }
+
     fun edit(wrapper: ItemWrapper) {
         _productToEdit.value = wrapper.position
     }
 
-    fun saveEditedData(wrapper: ItemWrapper, newName: String, newQuantity: String, newUnit: String) {
+    fun saveEditedData(
+        wrapper: ItemWrapper,
+        newName: String,
+        newQuantity: String,
+        newUnit: String
+    ) {
         if (newName.isEmpty()) {
 //            showSnackbarMessage(R.string.snackbar_empty_product_name)
             return
@@ -217,7 +240,7 @@ class BuyListDetailViewModel(private val repository: BuyListsDataSource) : ViewM
     }
 
     private fun getColor(): String {
-        _selectedColor.value?.let {position ->
+        _selectedColor.value?.let { position ->
             _colors.value?.let { colors ->
                 return colors[position]
             }

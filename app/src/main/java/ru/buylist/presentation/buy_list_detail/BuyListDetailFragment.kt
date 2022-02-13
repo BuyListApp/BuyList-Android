@@ -1,7 +1,11 @@
 package ru.buylist.presentation.buy_list_detail
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.viewModels
@@ -46,9 +50,24 @@ class BuyListDetailFragment : BaseFragment<FragmentBuyListDetailBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         setupAdapter()
         setupNavigation()
         setupSnackbar()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.details_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.share -> {
+                viewModel.share()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setupSnackbar() {
@@ -56,33 +75,90 @@ class BuyListDetailFragment : BaseFragment<FragmentBuyListDetailBinding>() {
     }
 
     private fun setupNavigation() {
-        viewModel.addProductEvent.observe(viewLifecycleOwner, EventObserver {
-            expand(fab_add, fab_menu, null)
-        })
+        viewModel
+            .addProductEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { expand(fab_add, fab_menu, null) }
+            )
 
-        viewModel.newProductEvent.observe(viewLifecycleOwner, EventObserver {
-            expand(fab_menu, layout_new_item, field_name)
-        })
+        viewModel
+            .newProductEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { expand(fab_menu, layout_new_item, field_name) }
+            )
 
-        viewModel.productsFromPatternEvent.observe(viewLifecycleOwner, EventObserver {
-            val action = BuyListDetailFragmentDirections
-                    .actionBuyListDetailFragmentToMoveProductsFromPatternFragment(args.buyListId)
-            findNavController().navigate(action)
-        })
+        viewModel
+            .productsFromPatternEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver {
+                    val action = BuyListDetailFragmentDirections
+                        .actionBuyListDetailFragmentToMoveProductsFromPatternFragment(args.buyListId)
+                    findNavController().navigate(action)
+                }
+            )
 
-        viewModel.productsFromRecipeEvent.observe(viewLifecycleOwner, EventObserver {
-            val action = BuyListDetailFragmentDirections
-                    .actionBuyListDetailFragmentToMoveProductsFromRecipeFragment(args.buyListId)
-            findNavController().navigate(action)
-        })
+        viewModel
+            .productsFromRecipeEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver {
+                    val action = BuyListDetailFragmentDirections
+                        .actionBuyListDetailFragmentToMoveProductsFromRecipeFragment(args.buyListId)
+                    findNavController().navigate(action)
+                }
+            )
 
-        viewModel.productAddedEvent.observe(viewLifecycleOwner, EventObserver {
-            minimize(fab_menu, fab_add, field_name)
-        })
+        viewModel
+            .productAddedEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { minimize(fab_menu, fab_add, field_name) }
+            )
 
-        viewModel.saveProductEvent.observe(viewLifecycleOwner, EventObserver {
-            field_name.requestFocus()
-        })
+        viewModel
+            .saveProductEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { field_name.requestFocus() }
+            )
+
+        viewModel
+            .shareBuyList
+            .observe(viewLifecycleOwner, EventObserver(::shareBuyList))
+    }
+
+    private fun shareBuyList(products: List<String>) {
+        val data = StringBuilder().apply {
+            append(
+                args.buyListTitle.ifBlank {
+                    getString(R.string.buylist_title_share)
+                }
+            )
+            append("\n")
+            append("\n")
+            products.forEachIndexed { index, product ->
+                append(product)
+                if (index != products.lastIndex) {
+                    append("\n")
+                }
+            }
+        }.toString()
+
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, data)
+            type = "text/plain"
+        }
+
+        startActivity(
+            Intent.createChooser(
+                shareIntent,
+                getString(R.string.label_share)
+            )
+        )
     }
 
     private fun expand(start: View, end: View, field: EditText?) {
@@ -92,7 +168,10 @@ class BuyListDetailFragment : BaseFragment<FragmentBuyListDetailBinding>() {
             addTarget(end)
         }
 
-        TransitionManager.beginDelayedTransition(requireActivity().findViewById(android.R.id.content), transition)
+        TransitionManager.beginDelayedTransition(
+            requireActivity().findViewById(android.R.id.content),
+            transition
+        )
         end.visibility = View.VISIBLE
         shadow_view.visibility = View.VISIBLE
         start.visibility = View.GONE
@@ -114,21 +193,23 @@ class BuyListDetailFragment : BaseFragment<FragmentBuyListDetailBinding>() {
     }
 
     private fun buildContainerTransform() =
-            MaterialContainerTransform().apply {
-                scrimColor = Color.TRANSPARENT
-                duration = 500
-                fadeMode = MaterialContainerTransform.FADE_MODE_IN
-                interpolator = FastOutSlowInInterpolator()
-            }
+        MaterialContainerTransform().apply {
+            scrimColor = Color.TRANSPARENT
+            duration = 500
+            fadeMode = MaterialContainerTransform.FADE_MODE_IN
+            interpolator = FastOutSlowInInterpolator()
+        }
 
     private fun isLastCircleVisible(circlesAdapter: CirclesAdapter): Boolean {
-        val layoutManager: LinearLayoutManager = recycler_circles.layoutManager as LinearLayoutManager
+        val layoutManager: LinearLayoutManager =
+            recycler_circles.layoutManager as LinearLayoutManager
         val position = layoutManager.findLastVisibleItemPosition()
         return (position >= circlesAdapter.itemCount - 1)
     }
 
     private fun isFirstCircleVisible(): Boolean {
-        val layoutManager: LinearLayoutManager = recycler_circles.layoutManager as LinearLayoutManager
+        val layoutManager: LinearLayoutManager =
+            recycler_circles.layoutManager as LinearLayoutManager
         val position = layoutManager.findFirstVisibleItemPosition()
         return position > 0
     }
@@ -148,9 +229,12 @@ class BuyListDetailFragment : BaseFragment<FragmentBuyListDetailBinding>() {
         recycler_circles.apply { adapter = circlesAdapter }
 
         recycler_circles.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun  onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                viewModel.showHideArrows(isFirstCircleVisible(), isLastCircleVisible(circlesAdapter))
+                viewModel.showHideArrows(
+                    isFirstCircleVisible(),
+                    isLastCircleVisible(circlesAdapter)
+                )
             }
         })
 

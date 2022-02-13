@@ -41,19 +41,30 @@ class BuyListsFragment : BaseFragment<FragmentBuyListsBinding>() {
     }
 
     private fun setupNavigation() {
-        viewModel.addBuyList.observe(viewLifecycleOwner, EventObserver {
-            expandFab()
-        })
+        viewModel
+            .addBuyList
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { expandFab() }
+            )
 
-        viewModel.buyListCreated.observe(viewLifecycleOwner, EventObserver {
-            minimizeFab()
-        })
+        viewModel
+            .buyListCreated
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { minimizeFab() }
+            )
 
-        viewModel.detailsEvent.observe(viewLifecycleOwner, EventObserver { buyList ->
-            val action = BuyListsFragmentDirections
-                    .actionBuyListFragmentToBuyListDetailFragment(buyList.id, buyList.title)
-            findNavController().navigate(action)
-        })
+        viewModel
+            .detailsEvent
+            .observe(
+                viewLifecycleOwner,
+                EventObserver { buyList ->
+                    val action = BuyListsFragmentDirections
+                        .actionBuyListFragmentToBuyListDetailFragment(buyList.id, buyList.title)
+                    findNavController().navigate(action)
+                }
+            )
     }
 
     private fun setupAdapter() {
@@ -68,7 +79,10 @@ class BuyListsFragment : BaseFragment<FragmentBuyListsBinding>() {
             addTarget(layout_new_item)
         }
 
-        TransitionManager.beginDelayedTransition(requireActivity().findViewById(android.R.id.content), transition)
+        TransitionManager.beginDelayedTransition(
+            requireActivity().findViewById(android.R.id.content),
+            transition
+        )
         layout_new_item.visibility = View.VISIBLE
         shadow_view.visibility = View.VISIBLE
         fab_add.visibility = View.GONE
@@ -91,10 +105,10 @@ class BuyListsFragment : BaseFragment<FragmentBuyListsBinding>() {
     }
 
     private fun buildContainerTransform() =
-            MaterialContainerTransform().apply {
-                scrimColor = Color.TRANSPARENT
-                duration = 500
-                fadeMode = MaterialContainerTransform.FADE_MODE_IN
-                interpolator = FastOutSlowInInterpolator()
-            }
+        MaterialContainerTransform().apply {
+            scrimColor = Color.TRANSPARENT
+            duration = 500
+            fadeMode = MaterialContainerTransform.FADE_MODE_IN
+            interpolator = FastOutSlowInInterpolator()
+        }
 }
