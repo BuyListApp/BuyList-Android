@@ -2,13 +2,13 @@ package ru.buylist.presentation.product_dictionary
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import ru.buylist.data.entity.GlobalItem
+import ru.buylist.data.wrappers.GlobalItemWrapper
 
 object ProductDictionaryBindings {
 
     @BindingAdapter("app:product_dictionary")
     @JvmStatic
-    fun setProducts(recycler: RecyclerView, products: List<GlobalItem>?) {
+    fun setProducts(recycler: RecyclerView, products: List<GlobalItemWrapper>?) {
         products?.let {
             (recycler.adapter as ProductDictionaryAdapter).submitList(products)
         }
