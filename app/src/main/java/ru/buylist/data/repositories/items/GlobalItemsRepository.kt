@@ -49,6 +49,12 @@ class GlobalItemsRepository(
         }
     }
 
+    override suspend fun deleteGlobalItem(globalItem: GlobalItem) {
+        withContext(ioDispatcher) {
+            globalItemDao.deleteGlobalItem(globalItem)
+        }
+    }
+
     override fun observeGlobalItems(): LiveData<Result<List<GlobalItem>>> {
         return globalItemDao.observeGlobalItems().map {
             Success(it)

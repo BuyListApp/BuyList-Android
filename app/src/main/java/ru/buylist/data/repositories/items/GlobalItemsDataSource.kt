@@ -16,5 +16,7 @@ interface GlobalItemsDataSource {
 
     suspend fun getGlobalItem(globalItemId: Long): Result<GlobalItem>
 
+    suspend fun deleteGlobalItem(globalItem: GlobalItem)
+
     fun observeGlobalItems(): LiveData<Result<List<GlobalItem>>>
 }

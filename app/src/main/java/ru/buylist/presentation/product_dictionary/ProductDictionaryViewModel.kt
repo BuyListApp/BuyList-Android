@@ -2,28 +2,44 @@ package ru.buylist.presentation.product_dictionary
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import ru.buylist.R
 import ru.buylist.data.Result
 import ru.buylist.data.Result.Success
 import ru.buylist.data.entity.GlobalItem
 import ru.buylist.data.repositories.items.GlobalItemsDataSource
 import ru.buylist.data.wrappers.CircleWrapper
+import ru.buylist.data.wrappers.GlobalItemWrapper
 import ru.buylist.presentation.data.SnackbarData
 import ru.buylist.utils.CategoryInfo
 import ru.buylist.utils.Event
 
-class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) : ViewModel() {
+class ProductDictionaryViewModel(
+    private val repository: GlobalItemsDataSource
+) : ViewModel() {
 
-    private val _products: LiveData<List<GlobalItem>> = repository.observeGlobalItems().map {
-        loadProducts(it)
-    }
-    val products: LiveData<List<GlobalItem>> = _products
+    private val _forceUpdate = MutableLiveData(false)
+    private val _productToEdit = MutableLiveData<Int>()
+
+    private val _triggers = MediatorLiveData<Pair<Boolean?, Int?>>()
+        .apply {
+            addSource(_forceUpdate) { value = Pair(it, _productToEdit.value) }
+            addSource(_productToEdit) { value = Pair(_forceUpdate.value, it) }
+        }
+
+    private val _products: LiveData<List<GlobalItemWrapper>> = _triggers
+        .switchMap { (_, editablePosition) ->
+            repository
+                .observeGlobalItems()
+                .map { productsResult ->
+                    loadProducts(productsResult, editablePosition)
+                }
+        }
+
+    val products: LiveData<List<GlobalItemWrapper>> = _products
 
     private val _colors = MutableLiveData<List<String>>()
     private val _selectedColor = MutableLiveData<Int>()
 
-    private val _circlesUpdate
-            = MediatorLiveData<Pair<List<String>?, Int?>>().apply {
+    private val _circlesUpdate = MediatorLiveData<Pair<List<String>?, Int?>>().apply {
         addSource(_colors) { value = Pair(it, _selectedColor.value) }
         addSource(_selectedColor) { value = Pair(_colors.value, it) }
     }
@@ -39,9 +55,9 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
 
     val productName = MutableLiveData<String>()
 
-    val fabIsShown = MutableLiveData<Boolean>(true)
-    val prevArrowIsShown = MutableLiveData<Boolean>(true)
-    val nextArrowIsShown = MutableLiveData<Boolean>(true)
+    val fabIsShown = MutableLiveData(true)
+    val prevArrowIsShown = MutableLiveData(true)
+    val nextArrowIsShown = MutableLiveData(true)
 
     private val _snackbarText = MutableLiveData<Event<SnackbarData>>()
     val snackbarText: LiveData<Event<SnackbarData>> = _snackbarText
@@ -61,6 +77,19 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
         _addProductEvent.value = Event(Unit)
     }
 
+    fun edit(wrapper: GlobalItemWrapper) {
+        _productToEdit.value = wrapper.position
+    }
+
+    fun saveEditedData(wrapper: GlobalItemWrapper, newName: String) {
+        wrapper.item.name = newName
+        viewModelScope.launch {
+            repository.updateGlobalItem(wrapper.item)
+        }
+        _productToEdit.value = null
+        fabIsShown.value = true
+    }
+
     fun saveNewProduct() {
         val name = productName.value
         if (name == null) {
@@ -70,6 +99,10 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
 
         createProduct(GlobalItem(name = name, color = getColor()))
         productName.value = null
+    }
+
+    fun delete(globalItemWrapper: GlobalItemWrapper) = viewModelScope.launch {
+        repository.deleteGlobalItem(globalItemWrapper.item)
     }
 
     fun hideNewProductLayout() {
@@ -94,7 +127,7 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
     }
 
     private fun getColor(): String {
-        _selectedColor.value?.let {position ->
+        _selectedColor.value?.let { position ->
             _colors.value?.let { colors ->
                 return colors[position]
             }
@@ -119,9 +152,30 @@ class ProductDictionaryViewModel(private val repository: GlobalItemsDataSource) 
         return newList
     }
 
-    private fun loadProducts(productsResult: Result<List<GlobalItem>>): List<GlobalItem> {
+    private fun mapProducts(
+        products: List<GlobalItem>,
+        editablePosition: Int?
+    ): List<GlobalItemWrapper> {
+        return products
+            .mapIndexed { index, product ->
+                GlobalItemWrapper(
+                    item = product,
+                    position = index,
+                    isEditable = editablePosition == index
+                )
+            }
+            .sortedBy { it.item.name }
+    }
+
+    private fun loadProducts(
+        productsResult: Result<List<GlobalItem>>,
+        editablePosition: Int?
+    ): List<GlobalItemWrapper> {
         return if (productsResult is Success) {
-            productsResult.data
+            mapProducts(
+                products = productsResult.data,
+                editablePosition = editablePosition
+            )
         } else {
             emptyList()
         }
