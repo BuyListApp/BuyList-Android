@@ -1,9 +1,13 @@
-# BuyList
+<img src="https://github.com/BuyListApp/BuyList-Android/blob/master/app/src/main/res/drawable/ic_logo.png" width="400">
 
-BuyList is a free [Android](https://en.wikipedia.org/wiki/Android_(operating_system)) application that will help you create a shopping list.
+***
+
+BuyList is open source [Android](https://en.wikipedia.org/wiki/Android_(operating_system)) app that helps you create a shopping list.
+
+<a href='https://play.google.com/store/apps/details?id=ru.buylist&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/ru_ru/badges/static/images/badges/en_badge_web_generic.png' height="80"/></a>
 
 
-## Features
+## Summary
 
 - Making shopping lists.  
 - Patterns. They allow you to group products, for example, by purchase frequency or by favorite 
@@ -16,30 +20,61 @@ The main product names are already included in it, but if this is not enough, yo
 - The added products are automatically grouped by the selected color category.
 
 
-## Demo
+## Privacy
 
-<p align="center">
-  <img src="misc/image/buy-lists.jpg" width="300"/>
-  <img src="misc/image/nav-drawer.jpg" width="300"/>
-</p>
+This app has no ads and does not ask for any permissions.
 
-<p align="center">
-  <img src="misc/image/buy-list-detail.jpg" width="300"/>
-  <img src="misc/image/buy-list-detail-purchased.jpg" width="300"/>
-  <img src="misc/image/new-product.jpg" width="300"/>
-</p>
+BuyList doesn't send any data to a cloud and not having permission to access the internet is a strong guarantee of that.
 
-<p align="center">
-  <img src="misc/image/patterns.jpg" width="300"/>
-  <img src="misc/image/product-dictionary.jpg" width="300"/>
-</p>
-
-<p align="center">
-  <img src="misc/image/recipes.jpg" width="300"/>
-  <img src="misc/image/new-recipe.jpg" width="300"/>
-</p>
+The app collects anonymous data that reports problems and errors while using the app. This data is stored on third party servers (Google Analytics) and is used to improve the application and fix bugs.
 
 
+## Contributing
+
+If you found a bug, have an idea how to improve the BuyList app or have a question, please create new issue or comment existing one. If you would like to contribute code, fork the repository and send a pull request.
+
+
+## Screenshots
+
+<table>
+  <tr>
+    <th>
+        <a href="misc/image/buy-lists.jpg" target="_blank">
+        <img src="misc/image/buy-lists.jpg" width="200px" alt="image missing"/></a>
+    </th>
+    <th>
+        <a href="misc/image/buy-list-detail.jpg" target="_blank">
+        <img src="misc/image/buy-list-detail.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+    <th>
+        <a href="misc/image/buy-list-detail-purchased.jpg" target="_blank">
+        <img src="misc/image/buy-list-detail-purchased.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+    <th>
+        <a href="misc/image/new-product.jpg" target="_blank">
+        <img src="misc/image/new-product.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+  </tr>
+
+  <tr>
+    <th>
+        <a href="misc/image/patterns.jpg" target="_blank">
+        <img src="misc/image/patterns.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+    <th>
+        <a href="misc/image/product-dictionary.jpg" target="_blank">
+        <img src="misc/image/product-dictionary.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+    <th>
+        <a href="misc/image/recipes.jpg" target="_blank">
+        <img src="misc/image/recipes.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+    <th>
+        <a href="misc/image/new-recipe.jpg" target="_blank">
+        <img src="misc/image/new-recipe.jpg" width="200px" alt="image missing"/> </a>
+    </th>
+  </tr>
+</table>
 
 
 ## Project characteristics
