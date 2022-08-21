@@ -11,5 +11,6 @@
         android:minHeight="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         app:titleTextColor="@color/colorWhite"
+        app:collapseIcon="@drawable/ic_arrow_back"
         app:title="@string/app_name" />
 </com.google.android.material.appbar.AppBarLayout>
