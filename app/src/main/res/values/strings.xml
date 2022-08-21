@@ -11,6 +11,7 @@
     <string name="recipe_title_share">Рецепт</string>
     <string name="label_edit">Редактировать</string>
     <string name="label_delete">Удалить</string>
+    <string name="label_search">Поиск</string>
     <string name="email_subject">Отзыв по BuyList</string>
     <string name="hint_product_name">Название продукта</string>
     <string name="hint_product_quantity">1</string>
