@@ -17,20 +17,44 @@ class ProductDictionaryViewModel(
 ) : ViewModel() {
 
     private val _forceUpdate = MutableLiveData(false)
-    private val _productToEdit = MutableLiveData<Int>()
+    private val _productToEdit = MutableLiveData<Int>(null)
+    private val _searchQuery = MutableLiveData<String>(null)
 
-    private val _triggers = MediatorLiveData<Pair<Boolean?, Int?>>()
+    private val _triggers = MediatorLiveData<ProductDictionaryUpdatedData>()
         .apply {
-            addSource(_forceUpdate) { value = Pair(it, _productToEdit.value) }
-            addSource(_productToEdit) { value = Pair(_forceUpdate.value, it) }
+            addSource(_forceUpdate) { forceUpdate ->
+                value = ProductDictionaryUpdatedData(
+                    forceUpdate = forceUpdate,
+                    productPositionToEdit = _productToEdit.value,
+                    searchQuery = _searchQuery.value
+                )
+            }
+            addSource(_productToEdit) { productPositionToEdit ->
+                value = ProductDictionaryUpdatedData(
+                    forceUpdate = _forceUpdate.value ?: false,
+                    productPositionToEdit = productPositionToEdit,
+                    searchQuery = _searchQuery.value
+                )
+            }
+            addSource(_searchQuery) { searchQuery ->
+                value = ProductDictionaryUpdatedData(
+                    forceUpdate = _forceUpdate.value ?: false,
+                    productPositionToEdit = _productToEdit.value,
+                    searchQuery = searchQuery
+                )
+            }
         }
 
     private val _products: LiveData<List<GlobalItemWrapper>> = _triggers
-        .switchMap { (_, editablePosition) ->
+        .switchMap { (_, editablePosition, searchQuery) ->
             repository
                 .observeGlobalItems()
                 .map { productsResult ->
-                    loadProducts(productsResult, editablePosition)
+                    loadProducts(
+                        productsResult = productsResult,
+                        editablePosition = editablePosition,
+                        searchQuery = searchQuery
+                    )
                 }
         }
 
@@ -105,6 +129,10 @@ class ProductDictionaryViewModel(
         repository.deleteGlobalItem(globalItemWrapper.item)
     }
 
+    fun search(productName: String?) {
+        _searchQuery.value = productName
+    }
+
     fun hideNewProductLayout() {
         _productCreated.value = Event(Unit)
     }
@@ -169,16 +197,28 @@ class ProductDictionaryViewModel(
 
     private fun loadProducts(
         productsResult: Result<List<GlobalItem>>,
-        editablePosition: Int?
+        editablePosition: Int?,
+        searchQuery: String?
     ): List<GlobalItemWrapper> {
         return if (productsResult is Success) {
-            mapProducts(
+            val items = mapProducts(
                 products = productsResult.data,
                 editablePosition = editablePosition
             )
+            if (searchQuery == null) {
+                items
+            } else {
+                items.filter { it.item.name.startsWith(searchQuery, true) }
+            }
         } else {
             emptyList()
         }
     }
+
+    private data class ProductDictionaryUpdatedData(
+        val forceUpdate: Boolean,
+        val productPositionToEdit: Int?,
+        val searchQuery: String?
+    )
 
 }

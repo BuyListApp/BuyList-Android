@@ -6,11 +6,13 @@
     <string name="label_pattern">Шаблоны</string>
     <string name="label_recipe">Рецепты</string>
     <string name="label_share">Поделиться</string>
+    <string name="label_sort">Сортировка</string>
     <string name="buylist_title_share">Список покупок</string>
     <string name="pattern_title_share">Шаблон для списка покупок</string>
     <string name="recipe_title_share">Рецепт</string>
     <string name="label_edit">Редактировать</string>
     <string name="label_delete">Удалить</string>
+    <string name="label_search">Поиск</string>
     <string name="email_subject">Отзыв по BuyList</string>
     <string name="hint_product_name">Название продукта</string>
     <string name="hint_product_quantity">1</string>
@@ -45,6 +47,10 @@
     <string name="hint_recipe_category">Категория</string>
     <string name="hint_recipe_step">Описание шага</string>
     <string name="hint_cooking_time">Время приготовления</string>
+    <string name="label_recipe_sort_by_alphabetically">по алфавиту</string>
+    <string name="label_recipe_sort_by_category">по категории</string>
+    <string name="label_recipe_sort_by_cooking_time">по времени приготовления</string>
+    <string name="label_recipe_sort_by_date_of_creation">по дате создания</string>
 
     <!--ProductDictionary-->
     <string name="label_product_dictionary_info">Словарь пуст</string>

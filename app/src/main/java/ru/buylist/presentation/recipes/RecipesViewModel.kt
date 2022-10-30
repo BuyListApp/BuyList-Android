@@ -9,17 +9,33 @@ import ru.buylist.data.wrappers.RecipeWrapper
 import ru.buylist.data.repositories.recipe.RecipesDataSource
 import ru.buylist.utils.Event
 import ru.buylist.R
+import ru.buylist.presentation.data.RecipeSortKind
 import ru.buylist.presentation.data.SnackbarData
+import ru.buylist.utils.combineLatest
+import ru.buylist.utils.getRecipesSortKind
+import ru.buylist.utils.saveRecipesSortKind
 
 class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() {
 
-    private val _forceUpdate = MutableLiveData<Boolean>(false)
+    private val _forceUpdate = MutableLiveData(false)
+    private val _sortKind = MutableLiveData(getRecipesSortKind())
 
-    private val _recipes: LiveData<List<RecipeWrapper>> = _forceUpdate.switchMap { forceUpdate ->
-        if (forceUpdate) {
+    private val _recipes: LiveData<List<RecipeWrapper>> = combineLatest(
+        _forceUpdate,
+        _sortKind
+    ).switchMap { (forceUpdate, sortKind) ->
+        if (forceUpdate == true) {
             TODO("Load recipes from remote data source.")
         }
-        repository.observeRecipes().distinctUntilChanged().switchMap { loadRecipes(it) }
+        repository
+            .observeRecipes()
+            .distinctUntilChanged()
+            .map { result ->
+                loadRecipes(
+                    recipesResult = result,
+                    sortKind = sortKind
+                )
+            }
     }
 
     val recipes: LiveData<List<RecipeWrapper>> = _recipes
@@ -61,6 +77,11 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
         _detailsEvent.value = Event(recipe)
     }
 
+    fun sortRecipesBy(kind: RecipeSortKind) {
+        saveRecipesSortKind(kind)
+        _sortKind.value = kind
+    }
+
     private fun showSnackbarMessage(message: Int) {
         _snackbarText.value = Event(SnackbarData(message))
     }
@@ -74,17 +95,24 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
         return newList
     }
 
-    private fun loadRecipes(recipesResult: Result<List<Recipe>>): LiveData<List<RecipeWrapper>> {
-        val result = MutableLiveData<List<RecipeWrapper>>()
-
-        if (recipesResult is Success) {
-            viewModelScope.launch {
-                result.value = getWrappedRecipes(recipesResult.data)
-            }
+    private fun loadRecipes(
+        recipesResult: Result<List<Recipe>>,
+        sortKind: RecipeSortKind?
+    ): List<RecipeWrapper> {
+        return if (recipesResult is Success) {
+            getWrappedRecipes(recipesResult.data).sortedWith(
+                compareBy { wrapper ->
+                    when (sortKind) {
+                        RecipeSortKind.ALPHABETICALLY -> wrapper.recipe.title
+                        RecipeSortKind.CATEGORY -> wrapper.recipe.category
+                        RecipeSortKind.COOKING_TIME -> wrapper.recipe.cookingTime
+                        RecipeSortKind.DATE_OF_CREATION, null -> wrapper.recipe.id
+                    }
+                }
+            )
         } else {
-            result.value = emptyList()
             showSnackbarMessage(R.string.snackbar_recipes_loading_error)
+            emptyList()
         }
-        return result
     }
 }

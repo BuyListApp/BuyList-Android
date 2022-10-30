@@ -2,7 +2,11 @@ package ru.buylist.presentation.product_dictionary
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,8 +40,38 @@ class ProductDictionaryFragment : BaseFragment<FragmentProductDictionaryBinding>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         setupAdapter()
         setupNavigation()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.product_dictionary_menu, menu)
+
+        val searchItem = menu.findItem(R.id.menu_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { viewModel.search(it) }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                query?.let { viewModel.search(it) }
+                return true
+            }
+        })
+
+        searchItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                viewModel.search(null)
+                return true
+            }
+        })
     }
 
     private fun setupNavigation() {
@@ -58,9 +92,12 @@ class ProductDictionaryFragment : BaseFragment<FragmentProductDictionaryBinding>
         recycler_circles.adapter = circlesAdapter
 
         recycler_circles.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun  onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                viewModel.showHideArrows(isFirstCircleVisible(), isLastCircleVisible(circlesAdapter))
+                viewModel.showHideArrows(
+                    isFirstCircleVisible(),
+                    isLastCircleVisible(circlesAdapter)
+                )
             }
         })
     }
@@ -72,8 +109,10 @@ class ProductDictionaryFragment : BaseFragment<FragmentProductDictionaryBinding>
             addTarget(layout_new_item)
         }
 
-        TransitionManager.beginDelayedTransition(requireActivity()
-                .findViewById(android.R.id.content), transition)
+        TransitionManager.beginDelayedTransition(
+            requireActivity()
+                .findViewById(android.R.id.content), transition
+        )
         layout_new_item.visibility = View.VISIBLE
         shadow_view.visibility = View.VISIBLE
         fab_add.visibility = View.GONE
@@ -95,21 +134,23 @@ class ProductDictionaryFragment : BaseFragment<FragmentProductDictionaryBinding>
     }
 
     private fun buildContainerTransform() =
-            MaterialContainerTransform().apply {
-                scrimColor = Color.TRANSPARENT
-                duration = 500
-                fadeMode = MaterialContainerTransform.FADE_MODE_IN
-                interpolator = FastOutSlowInInterpolator()
-            }
+        MaterialContainerTransform().apply {
+            scrimColor = Color.TRANSPARENT
+            duration = 500
+            fadeMode = MaterialContainerTransform.FADE_MODE_IN
+            interpolator = FastOutSlowInInterpolator()
+        }
 
     private fun isLastCircleVisible(circlesAdapter: CirclesAdapter): Boolean {
-        val layoutManager: LinearLayoutManager = recycler_circles.layoutManager as LinearLayoutManager
+        val layoutManager: LinearLayoutManager =
+            recycler_circles.layoutManager as LinearLayoutManager
         val position = layoutManager.findLastVisibleItemPosition()
         return (position >= circlesAdapter.itemCount - 1)
     }
 
     private fun isFirstCircleVisible(): Boolean {
-        val layoutManager: LinearLayoutManager = recycler_circles.layoutManager as LinearLayoutManager
+        val layoutManager: LinearLayoutManager =
+            recycler_circles.layoutManager as LinearLayoutManager
         val position = layoutManager.findFirstVisibleItemPosition()
         return position > 0
     }
