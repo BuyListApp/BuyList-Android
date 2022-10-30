@@ -9,4 +9,5 @@ gradlew*
 .externalNativeBuild
 /app/google-services.json
 /app/release/
+android/
 *.hprof
