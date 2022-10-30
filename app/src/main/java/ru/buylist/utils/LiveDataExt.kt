@@ -22,3 +22,30 @@ fun <X, Y> combineLatest(
         }
     }
 }
+
+fun <X, Y, Z> combineLatest(
+    first: LiveData<X>,
+    second: LiveData<Y>,
+    third: LiveData<Z>
+): LiveData<Triple<X?, Y?, Z?>> {
+    return MediatorLiveData<Triple<X?, Y?, Z?>>().apply {
+        var lastFirst: X? = null
+        var lastSecond: Y? = null
+        var lastThird: Z? = null
+
+        addSource(first) {
+            lastFirst = it
+            value = Triple(lastFirst, lastSecond, lastThird)
+        }
+
+        addSource(second) {
+            lastSecond = it
+            value = Triple(lastFirst, lastSecond, lastThird)
+        }
+
+        addSource(third) {
+            lastThird = it
+            value = Triple(lastFirst, lastSecond, lastThird)
+        }
+    }
+}

@@ -19,11 +19,13 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
 
     private val _forceUpdate = MutableLiveData(false)
     private val _sortKind = MutableLiveData(getRecipesSortKind())
+    private val _searchQuery = MutableLiveData<String>(null)
 
     private val _recipes: LiveData<List<RecipeWrapper>> = combineLatest(
         _forceUpdate,
-        _sortKind
-    ).switchMap { (forceUpdate, sortKind) ->
+        _sortKind,
+        _searchQuery
+    ).switchMap { (forceUpdate, sortKind, searchQuery) ->
         if (forceUpdate == true) {
             TODO("Load recipes from remote data source.")
         }
@@ -33,7 +35,8 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
             .map { result ->
                 loadRecipes(
                     recipesResult = result,
-                    sortKind = sortKind
+                    sortKind = sortKind,
+                    searchQuery = searchQuery
                 )
             }
     }
@@ -82,6 +85,10 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
         _sortKind.value = kind
     }
 
+    fun search(query: String?) {
+        _searchQuery.value = query
+    }
+
     private fun showSnackbarMessage(message: Int) {
         _snackbarText.value = Event(SnackbarData(message))
     }
@@ -97,10 +104,11 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
 
     private fun loadRecipes(
         recipesResult: Result<List<Recipe>>,
-        sortKind: RecipeSortKind?
+        sortKind: RecipeSortKind?,
+        searchQuery: String?
     ): List<RecipeWrapper> {
         return if (recipesResult is Success) {
-            getWrappedRecipes(recipesResult.data).sortedWith(
+            val items = getWrappedRecipes(recipesResult.data).sortedWith(
                 compareBy { wrapper ->
                     when (sortKind) {
                         RecipeSortKind.ALPHABETICALLY -> wrapper.recipe.title
@@ -110,6 +118,14 @@ class RecipesViewModel(private val repository: RecipesDataSource) : ViewModel() 
                     }
                 }
             )
+            if (searchQuery == null) {
+                items
+            } else {
+                items.filter {
+                    it.recipe.title.contains(searchQuery, true)
+                            || it.recipe.category.contains(searchQuery, true)
+                }
+            }
         } else {
             showSnackbarMessage(R.string.snackbar_recipes_loading_error)
             emptyList()
