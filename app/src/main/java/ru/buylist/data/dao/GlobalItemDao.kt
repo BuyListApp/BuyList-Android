@@ -13,6 +13,9 @@ interface GlobalItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGlobalItem(globalItem: GlobalItem)
 
+    @Delete
+    suspend fun deleteGlobalItem(globalItem: GlobalItem)
+
     @Update
     suspend fun updateGlobalItem(globalItem: GlobalItem)
 
